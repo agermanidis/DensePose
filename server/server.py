@@ -129,6 +129,7 @@ def disconnect():
 # When a client sends data. This should call the main() function
 @socketio.on('update_request', namespace='/query')
 def new_request(request):
+  print('NEW CONNECTION! YES!')
   results = main(request["data"])
   emit('update_response', {"results": results})
 
