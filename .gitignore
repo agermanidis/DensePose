@@ -36,3 +36,6 @@ configs_old/*
 
 
 .nfs*
+
+# weights
+weights
