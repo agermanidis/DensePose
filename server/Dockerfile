@@ -1,4 +1,4 @@
-FROM c2-cuda9-cudnn7-wdata
+FROM 0970c8793bfc
 
 # Copy the weights
 RUN mkdir /densepose/weights
