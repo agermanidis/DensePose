@@ -36,6 +36,9 @@ from vis_utils import vis_one_image
 
 c2_utils.import_detectron_ops()
 
+logging.getLogger('socketio').setLevel(logging.ERROR)
+logging.getLogger('engineio').setLevel(logging.ERROR)
+
 # OpenCL may be enabled by default in OpenCV3; disable it because it's not
 # thread safe and causes unwanted GPU memory allocations.
 cv2.ocl.setUseOpenCL(False)
@@ -117,4 +120,4 @@ def new_request(request):
   emit('update_response', {"results": results})
 
 if __name__ == '__main__':
-  socketio.run(app, host='0.0.0.0', port=PORT, debug=True)
+  socketio.run(app, host='0.0.0.0', port=PORT, debug=False)
