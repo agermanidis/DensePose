@@ -1,8 +1,4 @@
-# Copyright (c) Facebook, Inc. and its affiliates.
-# All rights reserved.
-#
-# This source code is licensed under the license found in the
-# LICENSE file in the root directory of this source tree.
+# Save file as infer_simple.py but this has the model preloaded
 ##############################################################################
 
 """Perform inference on a single image or all images with a certain extension
@@ -34,7 +30,7 @@ from detectron.utils.timer import Timer
 import detectron.core.test_engine as infer_engine
 import detectron.datasets.dummy_datasets as dummy_datasets
 import detectron.utils.c2 as c2_utils
-import vis_utils_save_imgs as vis_utils
+from vis_utils_save_imgs import vis_one_image
 
 c2_utils.import_detectron_ops()
 
@@ -42,6 +38,8 @@ c2_utils.import_detectron_ops()
 # thread safe and causes unwanted GPU memory allocations.
 cv2.ocl.setUseOpenCL(False)
 
+cfg_file = 'configs/DensePose_ResNet101_FPN_s1x-e2e.yaml'
+weights_file = 'weights/DensePose_ResNet101_FPN_s1x-e2e.pkl'
 
 def parse_args():
     parser = argparse.ArgumentParser(description='End-to-end inference')
@@ -84,11 +82,11 @@ def parse_args():
 
 def main(args):
     logger = logging.getLogger(__name__)
-    merge_cfg_from_file(args.cfg)
+    merge_cfg_from_file(cfg_file)
     cfg.NUM_GPUS = 1
-    args.weights = cache_url(args.weights, cfg.DOWNLOAD_CACHE)
+    # args.weights = cache_url(args.weights, cfg.DOWNLOAD_CACHE)
     assert_and_infer_cfg(cache_urls=False)
-    model = infer_engine.initialize_model_from_cfg(args.weights)
+    model = infer_engine.initialize_model_from_cfg(weights_file)
     dummy_coco_dataset = dummy_datasets.get_coco_dataset()
 
     if os.path.isdir(args.im_or_folder):
@@ -117,7 +115,7 @@ def main(args):
                 'rest (caches and auto-tuning need to warm up)'
             )
 
-        vis_utils.vis_one_image(
+        vis_one_image(
             im[:, :, ::-1],  # BGR -> RGB for visualization
             im_name,
             args.output_dir,
