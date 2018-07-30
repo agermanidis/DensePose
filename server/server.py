@@ -34,6 +34,27 @@ import detectron.datasets.dummy_datasets as dummy_datasets
 import detectron.utils.c2 as c2_utils
 from vis_utils import vis_one_image
 
+# pix2pixHD Socket configs
+from socket import connect
+connect()
+#from socketIO_client import BaseNamespace, LoggingNamespace
+#from socketIO_client import SocketIO as SocketIOC
+
+#class QueryNamespace(BaseNamespace):
+ # def query_response(self, *args):
+  #  print('query response', args)
+
+  #def update_response(self, *args):
+   # print('update_request', args)
+
+#def handle_pix2pix_response(*args):
+ # print('handle_pix2pix', args)
+
+#pix2pixSocketClient = SocketIOC('65.19.181.36', 23100)
+#pix2pixSocketClient.on('update_response', handle_pix2pix_response)
+#query_namespace = socketIO.define(QueryNamespace, '/query')
+#query_namespace.on('update_response', handle_pix2pix_response)
+
 c2_utils.import_detectron_ops()
 
 logging.getLogger('socketio').setLevel(logging.ERROR)
@@ -95,6 +116,7 @@ def main(input_img):
 # Base route, functions a simple testing 
 @app.route('/')
 def index():
+  #pix2pixSocketClient.emit('update_request', {'data': 'yyy'})
   return jsonify(status="200", message='Densepose is running', query_route='/query', test_route='/test')
 
 # Test the model with a fix to see if it's working
@@ -120,4 +142,4 @@ def new_request(request):
   emit('update_response', {"results": results})
 
 if __name__ == '__main__':
-  socketio.run(app, host='0.0.0.0', port=PORT, debug=False)
+  socketio.run(app, host='0.0.0.0', port=PORT, debug=True)

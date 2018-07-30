@@ -1,4 +1,5 @@
-# Save file as infer_simple.py but this has the model preloaded
+# Infer over a collection of images
+# Same file as infer_simple.py but this has the model preloaded
 ##############################################################################
 
 """Perform inference on a single image or all images with a certain extension
@@ -18,9 +19,7 @@ import logging
 import os
 import sys
 import time
-
 from caffe2.python import workspace
-
 from detectron.core.config import assert_and_infer_cfg
 from detectron.core.config import cfg
 from detectron.core.config import merge_cfg_from_file
@@ -43,20 +42,6 @@ weights_file = 'weights/DensePose_ResNet101_FPN_s1x-e2e.pkl'
 
 def parse_args():
     parser = argparse.ArgumentParser(description='End-to-end inference')
-    parser.add_argument(
-        '--cfg',
-        dest='cfg',
-        help='cfg model file (/path/to/model_config.yaml)',
-        default=None,
-        type=str
-    )
-    parser.add_argument(
-        '--wts',
-        dest='weights',
-        help='weights model file (/path/to/model_weights.pkl)',
-        default=None,
-        type=str
-    )
     parser.add_argument(
         '--output-dir',
         dest='output_dir',
