@@ -8,6 +8,7 @@ import argparse
 import cv2  # NOQA (Must import before importing caffe2 due to bug in cv2)
 import glob
 import logging
+import requests
 import os
 import sys
 import time
@@ -33,27 +34,6 @@ import detectron.core.test_engine as infer_engine
 import detectron.datasets.dummy_datasets as dummy_datasets
 import detectron.utils.c2 as c2_utils
 from vis_utils import vis_one_image
-
-# pix2pixHD Socket configs
-from socket import connect
-connect()
-#from socketIO_client import BaseNamespace, LoggingNamespace
-#from socketIO_client import SocketIO as SocketIOC
-
-#class QueryNamespace(BaseNamespace):
- # def query_response(self, *args):
-  #  print('query response', args)
-
-  #def update_response(self, *args):
-   # print('update_request', args)
-
-#def handle_pix2pix_response(*args):
- # print('handle_pix2pix', args)
-
-#pix2pixSocketClient = SocketIOC('65.19.181.36', 23100)
-#pix2pixSocketClient.on('update_response', handle_pix2pix_response)
-#query_namespace = socketIO.define(QueryNamespace, '/query')
-#query_namespace.on('update_response', handle_pix2pix_response)
 
 c2_utils.import_detectron_ops()
 
@@ -85,6 +65,11 @@ PORT = 22100
 app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app)
+# Pix2Pix server Configs
+PUBLIC_IP = '65.19.181.36'
+PIX2PIX_PORT = '23100'
+PIX2PIX_ROUTE = '/infer'
+pix2pixURL = 'http://' + PUBLIC_IP + ':' + PIX2PIX_PORT + PIX2PIX_ROUTE
 
 # Take in base64 string and return PIL image
 def stringToImage(base64_string):
@@ -106,8 +91,9 @@ def main(input_img):
       model, img, None, timers=timers
     )
   result = vis_one_image(img, 'testImage', output_dir, cls_boxes, cls_segms, cls_keyps, cls_bodys, dataset=dummy_coco_dataset, box_alpha=0.3, show_class=True, thresh=0.7, kp_thresh=2)
+  r = requests.post(pix2pixURL, data = {'data': result})
   logger.info('Inference time: {:.3f}s'.format(time.time() - t))
-  return result
+  return r
 
 # --- 
 # Server Routes
@@ -116,8 +102,7 @@ def main(input_img):
 # Base route, functions a simple testing 
 @app.route('/')
 def index():
-  #pix2pixSocketClient.emit('update_request', {'data': 'yyy'})
-  return jsonify(status="200", message='Densepose is running', query_route='/query', test_route='/test')
+  return jsonify(status="200", message='Densepose is running', infer_route='/infer')
 
 # Test the model with a fix to see if it's working
 @app.route('/test')
@@ -139,7 +124,7 @@ def disconnect():
 @socketio.on('update_request', namespace='/query')
 def new_request(request):
   results = main(request["data"])
-  emit('update_response', {"results": results})
+  emit('update_response', {"results": results.text})
 
 if __name__ == '__main__':
   socketio.run(app, host='0.0.0.0', port=PORT, debug=True)
