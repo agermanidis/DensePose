@@ -90,8 +90,8 @@ def main(input_img):
     cls_boxes, cls_segms, cls_keyps, cls_bodys = infer_engine.im_detect_all(
       model, img, None, timers=timers
     )
-  result = vis_one_image(img, 'testImage', output_dir, cls_boxes, cls_segms, cls_keyps, cls_bodys, dataset=dummy_coco_dataset, box_alpha=0.3, show_class=True, thresh=0.7, kp_thresh=2)
-  r = requests.post(pix2pixURL, data = {'data': result})
+  densepose_img = vis_one_image(img, 'testImage', output_dir, cls_boxes, cls_segms, cls_keyps, cls_bodys, dataset=dummy_coco_dataset, box_alpha=0.3, show_class=True, thresh=0.7, kp_thresh=2)
+  r = requests.post(pix2pixURL, data = {'data': densepose_img})
   logger.info('Inference time: {:.3f}s'.format(time.time() - t))
   return r
 
