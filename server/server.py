@@ -95,7 +95,7 @@ def main(input_img):
   t = time.time()
   size = img.shape[:2]
   print(size)
-  img = imresize(img, (320, 240), interp='bilinear')
+  #img = imresize(img, (320, 240), interp='bilinear')
   with c2_utils.NamedCudaScope(0):
     cls_boxes, cls_segms, cls_keyps, cls_bodys = infer_engine.im_detect_all(
       model, img, None, timers=timers
@@ -129,6 +129,7 @@ def query():
 # When a client socket connects
 @socketio.on('connect', namespace='/query')
 def new_connection():
+  print('Client Connect')
   emit('successful_connection', {"data": "connection established"})
 
 # When a client socket disconnects
