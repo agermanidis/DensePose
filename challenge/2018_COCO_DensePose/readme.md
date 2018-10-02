@@ -27,6 +27,8 @@ Annotations on train (
 [train 2](https://s3.amazonaws.com/densepose/densepose_coco_2014_valminusminival.json)
 ) and [val](https://s3.amazonaws.com/densepose/densepose_coco_2014_minival.json)
 with over 48,000 people are publicly available.
+[Test set](https://s3.amazonaws.com/densepose/densepose_coco_2014_test.json)
+with the list of images is also available for download.
 
 Evaluation server for the 2018 task is
 [open](https://competitions.codalab.org/competitions/19636).
@@ -35,7 +37,7 @@ Evaluation server for the 2018 task is
 
 []() | []()
 ---- | -----
-**August 10, 2018** | Submission deadline (23:59 PST)
+**August 17, 2018** | Submission deadline (23:59 PST)
 August 26, 2018   | Challenge winners notified
 September 9, 2018 | Winners present at ECCV 2018 Workshop
 
