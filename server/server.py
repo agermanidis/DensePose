@@ -69,12 +69,6 @@ PORT = 22100
 app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app)
-# Pix2Pix server Configs
-PUBLIC_IP = '65.19.181.36'
-#PUBLIC_IP = '10.64.15.36'
-PIX2PIX_PORT = '23100'
-PIX2PIX_ROUTE = '/infer'
-pix2pixURL = 'http://' + PUBLIC_IP + ':' + PIX2PIX_PORT + PIX2PIX_ROUTE
 
 # Take in base64 string and return PIL image
 def stringToImage(base64_string):
@@ -94,7 +88,6 @@ def main(input_img):
   timers = defaultdict(Timer)
   t = time.time()
   size = img.shape[:2]
-  print(size)
   #img = imresize(img, (320, 240), interp='bilinear')
   with c2_utils.NamedCudaScope(0):
     cls_boxes, cls_segms, cls_keyps, cls_bodys = infer_engine.im_detect_all(
@@ -104,12 +97,8 @@ def main(input_img):
     print(key, timer.total_time)
   t2 = time.time()
   densepose_img = vis_one_image(img, 'testImage', output_dir, cls_boxes, cls_segms, cls_keyps, cls_bodys, dataset=dummy_coco_dataset, box_alpha=0.3, show_class=True, thresh=0.7, kp_thresh=2)
-  t3 = time.time()
-  r = requests.post(pix2pixURL, data = {'data': densepose_img})
   logger.info('Inference time: {:.3f}s'.format(t2 - t))
-  logger.info('Visualization time: {:.3f}s'.format(t3 - t2))
-  logger.info('Pix2pix time: {:.3f}s'.format(time.time() - t3))
-  return r
+  return densepose_img
 
 # --- 
 # Server Routes
@@ -119,12 +108,6 @@ def main(input_img):
 @app.route('/')
 def index():
   return jsonify(status="200", message='Densepose is running', infer_route='/infer')
-
-# Test the model with a fix to see if it's working
-@app.route('/test')
-def query():
-  results = main(None)
-  return jsonify(status="200", model='Densepose', response=results)
 
 # When a client socket connects
 @socketio.on('connect', namespace='/query')
@@ -141,7 +124,7 @@ def disconnect():
 @socketio.on('update_request', namespace='/query')
 def new_request(request):
   results = main(request["data"])
-  emit('update_response', {"results": results.text})
+  emit('update_response', {"results": results})
 
 if __name__ == '__main__':
   socketio.run(app, host='0.0.0.0', port=PORT, debug=False)
