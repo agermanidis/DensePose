@@ -5,10 +5,36 @@ spec:
   gpu: True
   cpu: False
 build_steps:
-  - conda install -y pytorch-nightly-cpu -c pytorch
-  - mv /usr/local/caffe2 /usr/local/caffe2_build
-  - export Caffe2_DIR=/usr/local/caffe2_build
-  - apt update && apt install -y libsm6 libxext6 libxrender1 cmake
+  - sudo apt-get update
+  - sudo apt-get install -y --no-install-recommends \
+      build-essential \
+      git \
+      libgoogle-glog-dev \
+      libgtest-dev \
+      libiomp-dev \
+      libleveldb-dev \
+      liblmdb-dev \
+      libopencv-dev \
+      libopenmpi-dev \
+      libsnappy-dev \
+      libprotobuf-dev \
+      openmpi-bin \
+      openmpi-doc \
+      protobuf-compiler \
+      python-dev \
+      python-pip                          
+  - pip install --user \
+      future \
+      numpy \
+      protobuf \
+      typing \
+      hypothesis
+  - sudo apt-get install -y --no-install-recommends \
+      libgflags-dev \
+      cmake
+  - git clone https://github.com/pytorch/pytorch.git && cd pytorch
+  - git submodule update --init --recursive
+  - python setup.py install
   - pip install -U Cython
   - pip install -r requirements.txt
   - make
