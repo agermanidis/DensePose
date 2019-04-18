@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
+set(CMAKE_VERBOSE_MAKEFILE ON)
+
 # Find the Caffe2 package.
 # Caffe2 exports the required targets, so find_package should work for
 # the standard Caffe2 installation. If you encounter problems with finding
