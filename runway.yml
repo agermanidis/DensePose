@@ -5,6 +5,16 @@ spec:
   gpu: True
   cpu: False
 build_steps:
+  - apt-get update && apt-get install -y --no-install-recommends \
+         build-essential \
+         cmake \
+         git \
+         curl \
+         vim \
+         ca-certificates \
+         libjpeg-dev \
+         libpng-dev && \
+     rm -rf /var/lib/apt/lists/*
   - conda install pytorch-nightly-cpu -c pytorch
   - apt update && apt install -y libsm6 libxext6 libxrender1 cmake
   - pip install -U Cython
