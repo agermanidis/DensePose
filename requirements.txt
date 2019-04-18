@@ -1,6 +1,6 @@
 numpy>=1.13
 pyyaml>=3.12
-matplotlib
+matplotlib==2.2.4
 opencv-python>=3.2
 setuptools
 mock
