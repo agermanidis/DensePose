@@ -5,7 +5,9 @@ spec:
   gpu: True
   cpu: False
 build_steps:
-  - conda install pytorch-nightly-cpu -c pytorch
+  - conda install -y pytorch-nightly-cpu -c pytorch
+  - mv /usr/local/caffe2 /usr/local/caffe2_build
+  - export Caffe2_DIR=/usr/local/caffe2_build
   - apt update && apt install -y libsm6 libxext6 libxrender1 cmake
   - pip install -U Cython
   - pip install -r requirements.txt
