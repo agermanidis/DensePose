@@ -6,7 +6,7 @@ spec:
   cpu: False
 build_steps:
   - apt-get update
-  - apt-get install -y --no-install-recommends \
+  - "apt-get install -y --no-install-recommends \
       build-essential \
       git \
       libgoogle-glog-dev \
@@ -23,13 +23,13 @@ build_steps:
       protobuf-compiler \
       python-dev \
       libgflags-dev \
-      cmake
-  - pip install --user \
+      cmake"
+  - "pip install --user \
       future \
       numpy \
       protobuf \
       typing \
-      hypothesis
+      hypothesis"
   - git clone https://github.com/pytorch/pytorch.git && cd pytorch
   - git submodule update --init --recursive
   - python setup.py install
