@@ -1,0 +1,11 @@
+python: 2.7
+cuda: 9.2
+entrypoint: python runway_model.py
+spec:
+  gpu: True
+build_steps:
+  - conda install pytorch-nightly-cpu -c pytorchs
+  - apt update && apt install -y libsm6 libxext6 libxrender1 cmake
+  - python setup.py develop
+  - mkdir -p build && cd build && cmake .. && make -j8
+  - pip install pycocotools
