@@ -5,8 +5,8 @@ spec:
   gpu: True
   cpu: False
 build_steps:
-  - sudo apt-get update
-  - sudo apt-get install -y --no-install-recommends \
+  - apt-get update
+  - apt-get install -y --no-install-recommends \
       build-essential \
       git \
       libgoogle-glog-dev \
@@ -22,16 +22,14 @@ build_steps:
       openmpi-doc \
       protobuf-compiler \
       python-dev \
-      python-pip                          
+      libgflags-dev \
+      cmake
   - pip install --user \
       future \
       numpy \
       protobuf \
       typing \
       hypothesis
-  - sudo apt-get install -y --no-install-recommends \
-      libgflags-dev \
-      cmake
   - git clone https://github.com/pytorch/pytorch.git && cd pytorch
   - git submodule update --init --recursive
   - python setup.py install
