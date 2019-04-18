@@ -9,6 +9,5 @@ build_steps:
   - apt update && apt install -y libsm6 libxext6 libxrender1 cmake
   - pip install -U Cython
   - pip install -r requirements.txt
-  - python setup.py develop
-  - mkdir -p build && cd build && cmake .. && make -j8
-  - pip install pycocotools
+  - make
+  - make ops
