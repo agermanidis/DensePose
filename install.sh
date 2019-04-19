@@ -24,10 +24,7 @@ pip install --user \
       typing \
       Cython \
       hypothesis
-git clone https://github.com/pytorch/pytorch.git && cd pytorch
-git submodule update --init --recursive
-python2 setup.py install
-python2 -c 'from caffe2.python import core'
+git clone https://github.com/pytorch/pytorch.git && cd pytorch && git submodule update --init --recursive && python2 setup.py install && cd ..
 pip install -U Cython
 pip install -r requirements.txt
 make
