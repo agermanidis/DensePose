@@ -233,7 +233,6 @@ def vis_one_image_opencv(
 
     return im
 
-import time
 def vis_one_image(
         im, im_name, output_dir, boxes, segms=None, keypoints=None, body_uv=None, thresh=0.9,
         kp_thresh=2, dpi=200, box_alpha=0.0, dataset=None, show_class=False,
@@ -242,31 +241,31 @@ def vis_one_image(
     if isinstance(boxes, list):
         boxes, segms, keypoints, classes = convert_from_cls_format(
             boxes, segms, keypoints)
-    # if boxes is None or boxes.shape[0] == 0 or max(boxes[:, 4]) < thresh:
-    #     return
-    IUV_fields = body_uv[1]
-    #
+
     All_Coords = np.zeros(im.shape)
-    All_inds = np.zeros([im.shape[0],im.shape[1]])
-    K = 26
-    ##
-    inds = np.argsort(boxes[:,4])
-    ##
-    for i, ind in enumerate(inds):
-        entry = boxes[ind,:]
-        if entry[4] > 0.65:
-            entry=entry[0:4].astype(int)
-            ####
-            output = IUV_fields[ind]
-            ####
-            All_Coords_Old = All_Coords[ entry[1] : entry[1]+output.shape[1],entry[0]:entry[0]+output.shape[2],:]
-            All_Coords_Old[All_Coords_Old==0]=output.transpose([1,2,0])[All_Coords_Old==0]
-            All_Coords[ entry[1] : entry[1]+output.shape[1],entry[0]:entry[0]+output.shape[2],:]= All_Coords_Old
-            ###
-            CurrentMask = (output[0,:,:]>0).astype(np.float32)
-            All_inds_old = All_inds[ entry[1] : entry[1]+output.shape[1],entry[0]:entry[0]+output.shape[2]]
-            All_inds_old[All_inds_old==0] = CurrentMask[All_inds_old==0]*i
-            All_inds[ entry[1] : entry[1]+output.shape[1],entry[0]:entry[0]+output.shape[2]] = All_inds_old
+    if boxes is not None and boxes.shape[0] > 0 and max(boxes[:, 4]) > thresh:
+        IUV_fields = body_uv[1]
+        All_inds = np.zeros([im.shape[0],im.shape[1]])
+        K = 26
+        ##
+        inds = np.argsort(boxes[:,4])
+        ##
+        for i, ind in enumerate(inds):
+            entry = boxes[ind,:]
+            if entry[4] > 0.65:
+                entry=entry[0:4].astype(int)
+                ####
+                output = IUV_fields[ind]
+                ####
+                All_Coords_Old = All_Coords[ entry[1] : entry[1]+output.shape[1],entry[0]:entry[0]+output.shape[2],:]
+                All_Coords_Old[All_Coords_Old==0]=output.transpose([1,2,0])[All_Coords_Old==0]
+                All_Coords[ entry[1] : entry[1]+output.shape[1],entry[0]:entry[0]+output.shape[2],:]= All_Coords_Old
+                ###
+                CurrentMask = (output[0,:,:]>0).astype(np.float32)
+                All_inds_old = All_inds[ entry[1] : entry[1]+output.shape[1],entry[0]:entry[0]+output.shape[2]]
+                All_inds_old[All_inds_old==0] = CurrentMask[All_inds_old==0]*i
+                All_inds[ entry[1] : entry[1]+output.shape[1],entry[0]:entry[0]+output.shape[2]] = All_inds_old
+
     All_Coords[:,:,1:3] = 255. * All_Coords[:,:,1:3]
     All_Coords[All_Coords>255] = 255.
     All_Coords = All_Coords.astype(np.uint8)
