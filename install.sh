@@ -16,7 +16,8 @@ apt-get install -y --no-install-recommends \
       protobuf-compiler \
       python-dev \
       libgflags-dev \
-      cmake
+      cmake \
+      wget
 pip install --user \
       future \
       numpy \
@@ -24,8 +25,9 @@ pip install --user \
       typing \
       Cython \
       hypothesis
-git clone https://github.com/pytorch/pytorch.git && cd pytorch && git submodule update --init --recursive && python2 setup.py install && cd ..
+git clone https://github.com/pytorch/pytorch.git && cd pytorch && git submodule update --init --recursive && python2 setup.py install && cp build/lib/* /usr/local/lib && cd ..
 pip install -U Cython
 pip install -r requirements.txt
 make
-make ops
+mkdir weights
+wget https://s3.amazonaws.com/runway-checkpoints/DensePose_ResNet50_FPN_s1x-e2e.pkl -P weights

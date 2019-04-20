@@ -281,9 +281,4 @@ def vis_one_image(
     All_Coords[All_Coords>255] = 255.
     All_Coords = All_Coords.astype(np.uint8)
     img = All_Coords
-    img = imresize(img,  (512, 1080), interp='bilinear')
-    retval, buffer = cv2.imencode('.jpg', img)
-    t = time.time()
-    jpg_as_text = base64.b64encode(buffer)
-    print('Encoding time: %f' % (time.time() - t))
-    return jpg_as_text
+    return img

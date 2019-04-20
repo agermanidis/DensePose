@@ -16,6 +16,7 @@ import base64
 import io
 import numpy as np
 import runway
+from runway.data_types import image
 
 from caffe2.python import workspace
 
@@ -60,11 +61,12 @@ def setup():
   return infer_engine.initialize_model_from_cfg(weights_file)
 
   
-@runway.command('visualize', inputs=[image], outputs=[image])
-def segment(model, inputs):
+@runway.command('visualize', inputs={'input': image}, outputs={'output': image})
+def visualize(model, inputs):
+  img = np.array(inputs['input'])
   with c2_utils.NamedCudaScope(0):
     cls_boxes, cls_segms, cls_keyps, cls_bodys = infer_engine.im_detect_all(
-      model, np.array(inputs['img']), None
+      model, img, None
     )
   output = vis_one_image(img, 'testImage', output_dir, cls_boxes, cls_segms, cls_keyps, cls_bodys, dataset=dummy_coco_dataset, box_alpha=0.3, show_class=True, thresh=0.7, kp_thresh=2)
   return dict(output=output)

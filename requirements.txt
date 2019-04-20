@@ -1,5 +1,4 @@
 numpy>=1.13
-pyyaml>=3.12
 matplotlib==2.2.4
 opencv-python>=3.2
 setuptools
@@ -10,3 +9,5 @@ memory_profiler
 future
 protobuf
 pycocotools
+runway-python==0.0.64
+pyyaml==3.12

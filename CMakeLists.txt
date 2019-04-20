@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)
 
+set(Caffe2_DIR "/model/pytorch/torch/share/cmake/Caffe2/")
+
 # Find the Caffe2 package.
 # Caffe2 exports the required targets, so find_package should work for
 # the standard Caffe2 installation. If you encounter problems with finding
@@ -52,3 +54,4 @@ if (CAFFE2_USE_CUDA OR CAFFE2_FOUND_CUDA)
   target_link_libraries(caffe2_detectron_custom_ops_gpu caffe2_gpu_library)
   install(TARGETS caffe2_detectron_custom_ops_gpu DESTINATION lib)
 endif()
+
