@@ -239,19 +239,11 @@ def vis_one_image(
         kp_thresh=2, dpi=200, box_alpha=0.0, dataset=None, show_class=False,
         ext='pdf'):
     """Visual debugging of detections."""
-    #if not os.path.exists(output_dir):
-    #    os.makedirs(output_dir)
-
-    t0 = time.time() 
-
     if isinstance(boxes, list):
         boxes, segms, keypoints, classes = convert_from_cls_format(
             boxes, segms, keypoints)
-
-    print(time.time() - t0)
-
-    if boxes is None or boxes.shape[0] == 0 or max(boxes[:, 4]) < thresh:
-        return
+    # if boxes is None or boxes.shape[0] == 0 or max(boxes[:, 4]) < thresh:
+    #     return
     IUV_fields = body_uv[1]
     #
     All_Coords = np.zeros(im.shape)
@@ -260,7 +252,6 @@ def vis_one_image(
     ##
     inds = np.argsort(boxes[:,4])
     ##
-    t1 = time.time()
     for i, ind in enumerate(inds):
         entry = boxes[ind,:]
         if entry[4] > 0.65:
@@ -276,7 +267,6 @@ def vis_one_image(
             All_inds_old = All_inds[ entry[1] : entry[1]+output.shape[1],entry[0]:entry[0]+output.shape[2]]
             All_inds_old[All_inds_old==0] = CurrentMask[All_inds_old==0]*i
             All_inds[ entry[1] : entry[1]+output.shape[1],entry[0]:entry[0]+output.shape[2]] = All_inds_old
-    print(time.time() - t1)
     All_Coords[:,:,1:3] = 255. * All_Coords[:,:,1:3]
     All_Coords[All_Coords>255] = 255.
     All_Coords = All_Coords.astype(np.uint8)
