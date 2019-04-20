@@ -31,3 +31,4 @@ pip install -r requirements.txt
 make
 mkdir weights
 wget https://s3.amazonaws.com/runway-checkpoints/DensePose_ResNet50_FPN_s1x-e2e.pkl -P weights
+cd DensePoseData && bash get_densepose_uv.sh && cd ..
