@@ -70,8 +70,7 @@ def visualize(model, inputs):
       model, img, None
     )
   output = vis_one_image(img, 'testImage', output_dir, cls_boxes, cls_segms, cls_keyps, cls_bodys, dataset=dummy_coco_dataset, box_alpha=0.3, show_class=True, thresh=0.7, kp_thresh=2)
-  b, g, r = output.split()
-  return Image.merge("RGB", (r, g, b))
+  return cv2.cvtColor(output, cv2.COLOR_BGR2RGB)
 
 
 if __name__ == '__main__':
