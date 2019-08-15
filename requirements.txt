@@ -1,13 +1,13 @@
-numpy>=1.13
+numpy==1.16.2
+scipy==1.2.1
 matplotlib==2.2.4
 opencv-python>=3.2
 setuptools
 mock
-scipy
 h5py
 memory_profiler
 future
 protobuf
 pycocotools
-runway-python==0.0.64
+runway-python
 pyyaml==3.12

@@ -17,6 +17,7 @@ import io
 import numpy as np
 import runway
 from runway.data_types import image
+from PIL import Image
 
 from caffe2.python import workspace
 
@@ -69,7 +70,8 @@ def visualize(model, inputs):
       model, img, None
     )
   output = vis_one_image(img, 'testImage', output_dir, cls_boxes, cls_segms, cls_keyps, cls_bodys, dataset=dummy_coco_dataset, box_alpha=0.3, show_class=True, thresh=0.7, kp_thresh=2)
-  return dict(output=output)
+  b, g, r = output.split()
+  return Image.merge("RGB", (r, g, b))
 
 
 if __name__ == '__main__':
